@@ -26,8 +26,8 @@ addons:
       - libgdal-dev
       - gdal-bin
       - pkg-config
- homebrew:
-   packages:
+  homebrew:
+    packages:
       - pkg-config
       - gdal
       - netcdf
