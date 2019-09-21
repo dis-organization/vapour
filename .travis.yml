@@ -26,6 +26,7 @@ addons:
       - libspatialite-dev
       - libgdal-dev
       - gdal-bin
+      - pkg-config
 
 matrix:
     include:
