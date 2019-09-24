@@ -1,4 +1,5 @@
 # Anticonf (tm) script by Jeroen Ooms (2019)
+# Modified for vapour MDSumner 2019-09-24
 # This script will query 'pkg-config' for the required cflags and ldflags.
 # If pkg-config is unavailable or does not find the library, try setting
 # INCLUDE_DIR and LIB_DIR manually via e.g:
@@ -63,8 +64,12 @@ if [ $R_CONFIG_ERROR ]; then
   exit 1;
 fi
 
+
 # Write to Makevars
-sed -e "s|@cflags@|$PKG_CFLAGS|" -e "s|@libs@|$PKG_LIBS|" src/Makevars.in > src/Makevars
+sed -e "s|@PKG_CPPFLAGS@|$PKG_CPPFLAGS|" -e "s|@PKG_LIBS@|$PKG_LIBS|" src/Makevars.in > src/Makevars
+
+echo "Updated Makevars"
+cat src/Makevars
 
 # Extract curlopt symbols
 ##echo '#include <curl/curl.h>' | ${CC} ${CPPFLAGS} ${PKG_CFLAGS} ${CFLAGS} -E -xc - | grep "^[ \t]*CURLOPT_.*," | sed s/,// > tools/option_table.txt
