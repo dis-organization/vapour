@@ -14,12 +14,13 @@ PKG_LIBS="-lgdal"
 PKG_CFLAGS=""
 
 # Use pkg-config if available
-pkg-config --version >/dev/null 2>&1
+gdal-config --version >/dev/null 2>&1
 if [ $? -eq 0 ]; then
-  PKGCONFIG_CFLAGS=`pkg-config --cflags ${PKG_CONFIG_NAME}`
+  PKGCONFIG_CFLAGS=`gdal-config --cflags`
+  PKGCONFIG_CPPFLAGS=`gdal-config --cflags`
   case "$PKGCONFIG_CFLAGS" in
-    *GDALSTATICLIB*) PKGCONFIG_LIBS=`pkg-config --libs --static ${PKG_CONFIG_NAME}`;;
-    *) PKGCONFIG_LIBS=`pkg-config --libs ${PKG_CONFIG_NAME}`;;
+    *GDALSTATICLIB*) PKGCONFIG_LIBS=`gdal-config --libs --static ${PKG_CONFIG_NAME}`;;
+    *) PKGCONFIG_LIBS=`gdal-config --libs ${PKG_CONFIG_NAME}`;;
   esac
 fi
 
@@ -29,9 +30,10 @@ if [ "$INCLUDE_DIR" ] || [ "$LIB_DIR" ]; then
   PKG_CFLAGS="-I$INCLUDE_DIR $PKG_CFLAGS"
   PKG_LIBS="-L$LIB_DIR $PKG_LIBS"
 elif [ "$PKGCONFIG_CFLAGS" ] || [ "$PKGCONFIG_LIBS" ]; then
-  echo "Found pkg-config cflags and libs!"
+  echo "Found pkg-config cflags and libs and cppflags!"
   PKG_CFLAGS=${PKGCONFIG_CFLAGS}
   PKG_LIBS=${PKGCONFIG_LIBS}
+  PKG_CPPFLAGS=${PKGCONFIG_CPPFLAGS}
 fi
 
 # Find compiler
@@ -42,7 +44,7 @@ CPPFLAGS=`${R_HOME}/bin/R CMD config CPPFLAGS`
 # For debugging
 echo "Using PKG_CFLAGS=$PKG_CFLAGS"
 echo "Using PKG_LIBS=$PKG_LIBS"
-
+echo "Using PKG_CPPFLAGS=$PKG_CPPFLAGS"
 # Test configuration
 echo "#include $PKG_TEST_HEADER" | ${CC} ${CPPFLAGS} ${PKG_CFLAGS} ${CFLAGS} -E -xc - >/dev/null 2>&1 || R_CONFIG_ERROR=1;
 
