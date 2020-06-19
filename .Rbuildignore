@@ -19,3 +19,7 @@
 ^CRAN-RELEASE$
 ^revdep$
 ^pkgdown$
+^\.github$
+^\.ccache$
+^tic\.R$
+^windows$
